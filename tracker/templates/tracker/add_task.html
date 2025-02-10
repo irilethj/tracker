@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Добавить задачу</title>
+</head>
+<body>
+    <h2>Добавить задачу</h2>
+    <form method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <p><button type="submit">Сохранить</button></p>
+        <a href="{% url 'task_list' %}">
+            <p><button type="button">Назад к списку задач</button></p>
+        </a>
+    </form>
+</body>
+</html>

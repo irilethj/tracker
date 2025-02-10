@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Редактировать задачу</title>
+</head>
+<body>
+    <h2>Задача: {{ object.name }}</h2>
+
+    <!-- Форма для редактирования задачи -->
+    <form method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <p>
+            <button type="submit" {% if object.status == 'completed' %}disabled{% endif %}>Сохранить</button>
+        </p>
+    </form>
+
+    <!-- Форма для удаления задачи -->
+    <form method="post" action="{% url 'delete_task' task.pk %}">
+        {% csrf_token %}
+        <p>
+            <button type="submit" onclick="return confirm('Вы уверены, что хотите удалить задачу {{ object.name }}?');">
+                Удалить задачу
+            </button>
+        </p>
+    </form>
+
+    <!-- Форма для остановки задачи -->
+    <form method="post" action="{% url 'pause_task' task.pk %}">
+        {% csrf_token %}
+        <p>
+            <button type="submit" {% if object.status == 'completed' or object.status == 'paused' %}disabled{% endif %}>
+                Остановить задачу
+            </button>
+        </p>
+    </form>
+
+    <!-- Форма для восстановления задачи -->
+    <form method="post" action="{% url 'continue_task' task.pk %}">
+        {% csrf_token %}
+        <p>
+            <button type="submit" {% if object.status != 'paused' %}disabled{% endif %}>
+                В работу
+            </button>
+        </p>
+    </form>
+
+    <!-- Форма для завершения задачи -->
+    <form method="post" action="{% url 'complete_task' object.pk %}">
+        {% csrf_token %}
+        <p>
+            <button type="submit"
+                    onclick="return confirm('Вы уверены, что хотите завершить задачу {{ object.name }}?');"
+                    {% if object.status == 'completed' or object.status == 'paused' %}disabled{% endif %}>
+                Завершить задачу
+            </button>
+        </p>
+    </form>
+
+    <!-- Кнопка для возврата к списку задач -->
+    <a href="{% url 'task_list' %}">
+        <p>
+            <button type="submit">Назад к списку задач</button>
+        </p>
+    </a>
+</body>
+</html>
